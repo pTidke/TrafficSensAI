@@ -5,6 +5,10 @@ import "leaflet/dist/leaflet.css";
 import axios from "axios";
 import L from "leaflet";
 
+import page1 from "./page1";
+import page2 from "./page2";
+import page3 from "./page3";
+
 // Fix for Marker Icons
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
@@ -240,18 +244,9 @@ const App = () => {
 				</div>
 				<Routes>
 					<Route path='/' element={<MapPage />} />
-					<Route
-						path='/page1'
-						element={<BlankPage title='Page 1' />}
-					/>
-					<Route
-						path='/page2'
-						element={<BlankPage title='Page 2' />}
-					/>
-					<Route
-						path='/page3'
-						element={<BlankPage title='Page 3' />}
-					/>
+					<Route path='/page1' element={<page1 />} />
+					<Route path='/page2' element={<page2 />} />
+					<Route path='/page3' element={<page3 />} />
 				</Routes>
 			</div>
 		</Router>
