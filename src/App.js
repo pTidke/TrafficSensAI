@@ -7,7 +7,7 @@ import L from "leaflet";
 
 import page1 from "./page1";
 import page2 from "./page2";
-import page3 from "./page3";
+import Profiles from "./Profiles";
 
 // Fix for Marker Icons
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
@@ -231,14 +231,14 @@ const App = () => {
 							Page 2
 						</Link>
 						<Link
-							to='/page3'
+							to='/Profiles'
 							style={{
 								color: "white",
 								margin: "0 10px",
 								textDecoration: "none",
 							}}
 						>
-							Page 3
+							Profiles
 						</Link>
 					</nav>
 				</div>
@@ -246,7 +246,7 @@ const App = () => {
 					<Route path='/' element={<MapPage />} />
 					<Route path='/page1' element={<page1 />} />
 					<Route path='/page2' element={<page2 />} />
-					<Route path='/page3' element={<page3 />} />
+					<Route path='/Profiles' element={<Profiles />} />
 				</Routes>
 			</div>
 		</Router>
