@@ -1,6 +1,7 @@
 import prajwalImg from "./prajwal.jpg";
 import pranjalImg from "./pranjal.jpg";
 import NikhithImg from "./nikhith.jpg";
+import PalashImg from "./palash.jpeg";
 
 import React, { useState } from "react";
 import "./Profiles.css";
@@ -18,7 +19,7 @@ const teamMembers = [
 		role: "Team Member",
 		description:
 			"Palash Vijaykumar Suryawanshi is a Graduate Student in the Big Data Analytics program at San Diego State University, holding a Bachelor of Technology in Computer Engineering. With expertise in data analytics, visualization, full-stack development, machine learning, and automation, he demonstrates advanced skills in programming languages like Python, R, and Java, as well as frameworks such as Angular, Flask, Django, and MySQL. Proficient in analysis and visualization tools like Tableau, ArcGIS, QGIS, Power BI, and Gephi, he brings a well-rounded and impactful skill set to the field. Notable accomplishments include developing a flight booking system using AWS Code Whisperer that reduced code generation time by 40% and boosted development speed by 25% through optimized AI-assisted prompts. He also created a hybrid recommendation blogging platform with real-time chat, utilizing NLP and machine learning for collaborative editing and personalized recommendations. Additionally, he built a sentiment analysis tool capable of processing over 100,000 tweets, leveraging NLP and machine learning to provide valuable sentiment insights for marketing strategies. Passionate about community involvement, he frequently participates in tech events, further enriching his contributions to the field.",
-		image: "path/to/alice.jpg",
+		image: PalashImg,
 	},
 	{
 		name: "Pranjal Patel",
