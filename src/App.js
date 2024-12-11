@@ -77,23 +77,6 @@ const App = () => {
 							Map
 						</Link>
 						<Link
-							to='/Methods'
-							style={{
-								color: "white",
-								textDecoration: "none",
-								fontSize: "16px",
-								display: "flex",
-								alignItems: "center",
-								transition: "color 0.3s",
-							}}
-						>
-							<FontAwesomeIcon
-								icon={faChartBar}
-								style={{ marginRight: "10px" }}
-							/>
-							Methodology
-						</Link>
-						<Link
 							to='/Hotspot'
 							style={{
 								color: "white",

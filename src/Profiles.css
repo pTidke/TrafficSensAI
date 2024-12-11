@@ -24,21 +24,14 @@ body {
     background: #ffffff; /* White card background for contrast */
     border: 1px solid #e0e0e0; /* Softer border */
     border-radius: 12px; /* Slightly more rounded corners */
-    padding: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Slightly more prominent shadow */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hover animation */
+    padding: 30px;
     text-align: center;
-}
-
-.profile-card:hover {
-    transform: translateY(-5px); /* Subtle lift on hover */
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); /* Slightly deeper shadow */
 }
 
 /* Profile Image */
 .profile-image {
-    width: 120px;
-    height: 120px;
+    width: 140px;
+    height: 140px;
     border-radius: 50%;
     object-fit: cover;
     overflow: hidden;
@@ -60,31 +53,13 @@ h3 {
     color: #666; /* Medium gray */
 }
 
-/* Toggle Button */
-.toggle-btn {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 25px; /* Rounded button */
-    cursor: pointer;
-    margin-top: 15px;
-    font-size: 0.9em;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Button shadow */
-    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Hover animation */
-}
-
-.toggle-btn:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
-}
-
 /* Description Text */
 .description {
     color: #555; /* Slightly darker gray */
     font-size: 0.95em;
     line-height: 1.6;
     margin-top: 10px;
+    text-align: justify; /* Justify the text content */
 }
 
 /* Additional Styling for Better Page Appearance */
@@ -98,16 +73,5 @@ h3 {
 .profiles-container {
     background-color: #ffffff; /* White box for profiles */
     border-radius: 16px;
-    padding: 30px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* Large shadow for container */
-}
-
-footer {
-    text-align: center;
-    margin-top: 30px;
     padding: 20px;
-    background-color: #f0f0f0; /* Light gray footer */
-    font-size: 0.85em;
-    color: #666;
-    border-top: 1px solid #ddd;
 }

@@ -3,7 +3,7 @@ import pranjalImg from "./pranjal.jpg";
 import NikhithImg from "./nikhith.jpg";
 import PalashImg from "./palash.jpeg";
 
-import React, { useState } from "react";
+import React from "react";
 import "./Profiles.css";
 
 const teamMembers = [
@@ -38,12 +38,6 @@ const teamMembers = [
 ];
 
 const Profiles = () => {
-	const [activeIndex, setActiveIndex] = useState(null);
-
-	const toggleDescription = (index) => {
-		setActiveIndex(activeIndex === index ? null : index);
-	};
-
 	return (
 		<div className='profiles-container'>
 			<h1>Team Profiles</h1>
@@ -57,17 +51,7 @@ const Profiles = () => {
 						/>
 						<h2>{member.name}</h2>
 						<h3>{member.role}</h3>
-						<button
-							className='toggle-btn'
-							onClick={() => toggleDescription(index)}
-						>
-							{activeIndex === index
-								? "Hide Details"
-								: "View Details"}
-						</button>
-						{activeIndex === index && (
-							<p className='description'>{member.description}</p>
-						)}
+						<p className='description'>{member.description}</p>
 					</div>
 				))}
 			</div>
