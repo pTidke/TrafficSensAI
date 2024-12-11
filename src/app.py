@@ -9,49 +9,49 @@ import numpy as np
 app = Flask(__name__)
 CORS(app)
 
+is_hotspot = 0
+
 # Load the model
 model = pickle.load(open(
     "/Users/shadowclone/Documents/coursework/BDA594/group Project/data_processing/collision_rf_model.pkl", "rb"))
 
-all_coords = pd.read_csv(
-    "/Users/shadowclone/Documents/coursework/BDA696/mapapp/react-map-app/src/flat_coords.csv")
+all_coords = pd.read_pickle(
+    "/Users/shadowclone/Documents/coursework/BDA696/mapapp/react-map-app/src/coords.pkl")
 
 
+# Define haversine function for PySpark
 def haversine(lat1, lon1, lat2, lon2):
     """
     Compute haversine distance between two points in miles.
     """
     R = 3958.8  # Radius of Earth in miles
-    print('in hav')
-    print(lat1, lon1, lat2, lon2)
+
     lat1, lon1, lat2, lon2 = map(np.radians, [lat1, lon1, lat2, lon2])
-    print('in hav')
     dlat = lat2 - lat1
     dlon = lon2 - lon1
-    print('in hav')
+
     a = np.sin(dlat / 2) ** 2 + np.cos(lat1) * \
         np.cos(lat2) * np.sin(dlon / 2) ** 2
     c = 2 * np.arctan2(np.sqrt(a), np.sqrt(1 - a))
-    print('in hav')
-    print(R * c)
 
     return R * c
 
-    # Create a UDF for haversine distance computation
+# Create a UDF for haversine distance computation
 
 
 def compute_membership(start_lat, start_lng, eps, min_samples, all_coords):
     """
     Determines if a point belongs to a cluster based on DBSCAN-like parameters.
     """
-    print(all_coords)
+
     distances = [haversine(start_lat, start_lng, coord[0], coord[1])
                  for coord in all_coords]
 
-    print(distances)
-    neighbors_within_eps = sum(d <= 0.5 for d in distances)
+    # print(distances)
 
-    return 1 if neighbors_within_eps >= 15 else 0
+    neighbors_within_eps = sum(d <= 0.1 for d in distances)
+
+    return 1 if neighbors_within_eps >= min_samples else 0
 
 
 @app.route("/api/check_hotspot", methods=["POST"])
@@ -63,7 +63,14 @@ def check_hotspot():
 
         epsilon = 2 / 6371.0088
 
-        # is_hotspot = compute_membership(lat, lng, epsilon, 15, all_coords)
+        # print(all_coords)
+        # all_coords = all_coords['0']
+
+        # print(type(all_coords))
+
+        global is_hotspot
+
+        is_hotspot = compute_membership(lat, lng, epsilon, 15, all_coords)
         # time.sleep(3)
         # print(is_hotspot)
 
@@ -71,7 +78,12 @@ def check_hotspot():
 
         # calculations here
 
-        return jsonify({"is_hotspot": 1})
+        if is_hotspot:
+            x = "This is potential hotspot"
+        else:
+            x = "Not Part of Hotspot cluster"
+
+        return jsonify({"is_hotspot": x})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -94,7 +106,8 @@ def submit():
 
         # Get JSON data from the request
         data = request.json
-        data['is_hotspot'] = 1
+        print(is_hotspot)
+        data['is_hotspot'] = is_hotspot
         print(data)
 
         # Ensure the expected structure
@@ -110,9 +123,17 @@ def submit():
 
         prediction = model.predict(df)[0]
         print(prediction)
+        if (prediction == 1):
+            x = f"{prediction} - Very Severe"
+        elif (prediction == 2):
+            x = f"{prediction} - Severe"
+        elif (prediction == 3):
+            x = f"{prediction} - Moderate"
+        else:
+            x = f"{prediction} - Not Severe"
 
         # Respond back with a success message
-        return jsonify({"prediction": int(prediction)})
+        return jsonify({"prediction": str(x)})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import Modal from "react-modal";
 import "leaflet/dist/leaflet.css";
 import axios from "axios";
 
 const MapPage = () => {
 	const [latLng, setLatLng] = useState({ lat: 32.766, lng: -117.1283 });
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [modalContent, setModalContent] = useState("");
 	const [formData, setFormData] = useState({
 		Temperature_F: 69.1,
 		Wind_Chill_F: 63.1353,
@@ -53,17 +56,41 @@ const MapPage = () => {
 		return null;
 	};
 
+	// const handleSubmit = async () => {
+	// 	try {
+	// 		const response = await axios.post(
+	// 			"http://127.0.0.1:5000/api/submit",
+	// 			formData
+	// 		);
+	// 		alert(`Data received by backend: ${JSON.stringify(response.data)}`);
+	// 	} catch (error) {
+	// 		console.error(error);
+	// 		alert("Error submitting data to backend.");
+	// 	}
+	// };
+
 	const handleSubmit = async () => {
 		try {
 			const response = await axios.post(
 				"http://127.0.0.1:5000/api/submit",
 				formData
 			);
-			alert(`Data received by backend: ${JSON.stringify(response.data)}`);
+			setModalContent(
+				`The Predicted Severity - ${JSON.stringify(
+					response.data["prediction"]
+				)}`
+			);
+			setIsModalOpen(true);
 		} catch (error) {
 			console.error(error);
-			alert("Error submitting data to backend.");
+			setModalContent("Error submitting data to backend.");
+			setIsModalOpen(true);
 		}
+	};
+
+	const closeModal = () => {
+		setIsModalOpen(false);
+		setModalContent("");
 	};
 
 	const handleToggle = (key) => {
@@ -96,10 +123,10 @@ const MapPage = () => {
 	};
 
 	return (
-		<div style={{ display: "flex", height: "calc(100vh - 40px)" }}>
+		<div style={{ display: "flex", height: "calc(100vh - 20px)" }}>
 			<div style={{ width: "20%", padding: "20px", overflowY: "scroll" }}>
 				{/* <h3>Location</h3> */}
-				<div style={{ display: "flex", marginBottom: "6px" }}>
+				<div style={{ display: "flex", marginBottom: "px" }}>
 					<div style={{ marginRight: "10px", width: "50%" }}>
 						<label style={{ fontWeight: "bold" }}>Latitude</label>
 						<p>{latLng.lat}</p>
@@ -144,7 +171,7 @@ const MapPage = () => {
 						style={{
 							display: "grid",
 							gridTemplateColumns: "1fr 1fr",
-							gap: "20px",
+							gap: "12px",
 						}}
 					>
 						{[
@@ -182,7 +209,7 @@ const MapPage = () => {
 							marginTop: "20px",
 							marginBottom: "8px",
 							gridTemplateColumns: "1fr 1fr",
-							gap: "20px",
+							gap: "18px",
 						}}
 					>
 						{[
@@ -237,7 +264,7 @@ const MapPage = () => {
 				<button
 					onClick={handleSubmit}
 					style={{
-						marginTop: "6px",
+						marginTop: "10px",
 						padding: "10px 15px",
 						backgroundColor: "#007BFF",
 						color: "white",
@@ -249,6 +276,50 @@ const MapPage = () => {
 				>
 					Predict Severity
 				</button>
+
+				{/* Modal */}
+				<Modal
+					isOpen={isModalOpen}
+					onRequestClose={closeModal}
+					style={{
+						overlay: {
+							backgroundColor: "rgba(0, 0, 0, 0.75)",
+						},
+						content: {
+							top: "50%",
+							left: "11%",
+							right: "auto",
+							bottom: "auto",
+							marginRight: "-50%",
+							transform: "translate(-50%, -50%)",
+							padding: "20px",
+							borderRadius: "8px",
+							boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+						},
+					}}
+				>
+					<h2 style={{ textAlign: "center", marginBottom: "15px" }}>
+						Model Results
+					</h2>
+					<p style={{ textAlign: "center", fontSize: "16px" }}>
+						{modalContent}
+					</p>
+					<div style={{ textAlign: "center", marginTop: "15px" }}>
+						<button
+							onClick={closeModal}
+							style={{
+								backgroundColor: "#007BFF",
+								color: "white",
+								border: "none",
+								padding: "10px 15px",
+								borderRadius: "5px",
+								cursor: "pointer",
+							}}
+						>
+							Close
+						</button>
+					</div>
+				</Modal>
 			</div>
 
 			<div style={{ width: "80%" }}>

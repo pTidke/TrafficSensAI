@@ -35,15 +35,14 @@ const App = () => {
 				{/* Navbar */}
 				<div
 					style={{
-						height: "50px",
+						height: "60px",
 						backgroundColor: "#1a1a2e",
 						color: "#fff",
 						display: "flex",
 						alignItems: "center",
 						justifyContent: "space-between",
-						padding: "0 20px",
-						boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-						fontFamily: "'Roboto', sans-serif",
+						padding: "6px 20px",
+						fontFamily: "'Aptos', sans-serif",
 					}}
 				>
 					{/* App Title */}
@@ -59,7 +58,7 @@ const App = () => {
 					</h2>
 
 					{/* Navigation */}
-					<nav style={{ display: "flex", gap: "15px" }}>
+					<nav style={{ display: "flex", gap: "25px" }}>
 						<Link
 							to='/'
 							style={{
@@ -73,7 +72,7 @@ const App = () => {
 						>
 							<FontAwesomeIcon
 								icon={faMap}
-								style={{ marginRight: "5px" }}
+								style={{ marginRight: "10px" }}
 							/>
 							Map
 						</Link>
@@ -90,7 +89,7 @@ const App = () => {
 						>
 							<FontAwesomeIcon
 								icon={faChartBar}
-								style={{ marginRight: "5px" }}
+								style={{ marginRight: "10px" }}
 							/>
 							Methodology
 						</Link>
@@ -107,9 +106,9 @@ const App = () => {
 						>
 							<FontAwesomeIcon
 								icon={faMapMarkerAlt}
-								style={{ marginRight: "5px" }}
+								style={{ marginRight: "10px" }}
 							/>
-							ArcGIS Map
+							Hotspot Map
 						</Link>
 						<Link
 							to='/Profiles'
@@ -124,7 +123,7 @@ const App = () => {
 						>
 							<FontAwesomeIcon
 								icon={faUser}
-								style={{ marginRight: "5px" }}
+								style={{ marginRight: "10px" }}
 							/>
 							Profiles
 						</Link>
