@@ -7,9 +7,9 @@ import L from "leaflet";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faMap,
-	faChartBar,
 	faMapMarkerAlt,
 	faUser,
+	faDatabase,
 } from "@fortawesome/free-solid-svg-icons";
 
 import Profiles from "./Profiles";
@@ -92,6 +92,23 @@ const App = () => {
 								style={{ marginRight: "10px" }}
 							/>
 							Hotspot Map
+						</Link>
+						<Link
+							to='/Methods'
+							style={{
+								color: "white",
+								textDecoration: "none",
+								fontSize: "16px",
+								display: "flex",
+								alignItems: "center",
+								transition: "color 0.3s",
+							}}
+						>
+							<FontAwesomeIcon
+								icon={faDatabase}
+								style={{ marginRight: "10px" }}
+							/>
+							Datasets
 						</Link>
 						<Link
 							to='/Profiles'
