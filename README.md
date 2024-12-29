@@ -1,70 +1,92 @@
-# Getting Started with Create React App
+# TrafficSensAI: Predictive Traffic Accident Analysis Tool 🚦
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+TrafficSensAI is a machine-learning framework for analyzing and predicting traffic collision hotspots. Leveraging datasets from multiple cities in the U.S., this project identifies high-risk traffic zones and contributes to accident prevention and optimized traffic management.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🌟 Key Features
+- **Hotspot Identification:** Uses DBSCAN clustering to detect accident-prone areas.
+- **Severity Prediction:** Employs a Random Forest model to predict accident severity based on temporal, environmental, and infrastructure features.
+- **Exploratory Analysis:** Unveils insights into accident trends using spatial and temporal visualizations.
+- **Granular Risk Ratings:** Classifies accident-prone areas on a risk scale (1-4) for targeted interventions.
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 📊 Data Sources
+1. [U.S. Accidents Dataset (Kaggle)](https://www.kaggle.com/datasets/sobhanmoosavi/us-accidents)
+2. [SWITRS California Highway Patrol Data](https://opendata.sandag.org/Transportation/Safety-Collisions-SWITRS-2023/7mrt-w2uu/data)
+3. [Los Angeles Traffic Collision Data](https://data.lacity.org/Public-Safety/Traffic-Collision-Data-from-2010-to-Present/d5tf-ez2w/data)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## 🔍 Methodology
+1. **Data Preprocessing:**
+   - Filtered California-specific data.
+   - Handled missing values and normalized variables.
+2. **Feature Engineering:**
+   - Extracted temporal and environmental features (e.g., `Time_of_Day`, `Weather_Condition`).
+   - Encoded categorical variables for machine learning models.
+3. **Clustering (DBSCAN):**
+   - Identified accident hotspots using spatial data.
+   - Rated clusters by accident density and severity.
+4. **Random Forest Model:**
+   - Predicted accident severity.
+   - Tuned hyperparameters for optimal accuracy.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## 📈 Visualizations
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+<div align="center">
+  <img src="https://via.placeholder.com/600x300?text=Geospatial+Hotspots" alt="Accident Hotspots" width="600">
+  <p><i>Figure 1: Geospatial map showing accident hotspots identified by DBSCAN.</i></p>
+  
+  <img src="https://via.placeholder.com/600x300?text=Severity+Prediction+Results" alt="Severity Prediction" width="600">
+  <p><i>Figure 2: Feature importance and prediction metrics from the Random Forest model.</i></p>
+</div>
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🌐 Applications
+1. **Urban Planning:** Design safer roadways and optimize traffic signals.
+2. **Traffic Law Enforcement:** Deploy resources during high-risk periods.
+3. **Public Awareness Campaigns:** Promote safer driving behaviors in adverse conditions.
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🚀 Future Enhancements
+- Incorporate real-time data (e.g., live weather feeds, traffic cameras).
+- Expand geospatial analysis with deep learning techniques.
+- Develop a dynamic, interactive web-based dashboard.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🤝 Team Members
+<table align="center">
+  <tr>
+    <th>Name</th>
+    <th>Role</th>
+  </tr>
+  <tr>
+    <td>Prajwal Tidke</td>
+    <td>Team Lead, Data Analysis, Machine Learning</td>
+  </tr>
+  <tr>
+    <td>Palash Suryawanshi</td>
+    <td>Visualization and EDA</td>
+  </tr>
+  <tr>
+    <td>Pranjal Patel</td>
+    <td>Data Cleaning and Feature Engineering</td>
+  </tr>
+  <tr>
+    <td>Nikhith Reddy</td>
+    <td>Model Validation and Optimization</td>
+  </tr>
+</table>
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+<div align="center">
+  <h3>Let's work together to make roads safer! 🚗✨</h3>
+</div>
