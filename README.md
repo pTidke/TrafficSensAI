@@ -35,15 +35,40 @@ TrafficSensAI is a machine-learning framework for analyzing and predicting traff
 
 ---
 
-## 📈 Visualizations
+## 📈 Snapshots
 
-<div align="center">
+<div align="left">
   <img src="https://via.placeholder.com/600x300?text=Geospatial+Hotspots" alt="Accident Hotspots" width="600">
-  <p><i>Figure 1: Geospatial map showing accident hotspots identified by DBSCAN.</i></p>
+   
+  <p><i>Figure 1: Geospatial map showing accident hotspots (ArcGIS)</i></p>
   
   <img src="https://via.placeholder.com/600x300?text=Severity+Prediction+Results" alt="Severity Prediction" width="600">
+  
+  <p><i>Figure 2: Feature importance and prediction metrics from the Random Forest model.</i></p>
+
+  <img src="https://via.placeholder.com/600x300?text=Severity+Prediction+Results" alt="Severity Prediction" width="600">
+  
   <p><i>Figure 2: Feature importance and prediction metrics from the Random Forest model.</i></p>
 </div>
+
+---
+
+### 1. **Geospatial map showing accident hotspots (ArcGIS)**
+
+![Geospatial Hotspots](dynamic_table_creation.jpeg)
+
+---
+
+### 2. **Severity Prediction Demo**
+
+![Severity Prediction](sql_concepts.jpeg)
+
+---
+
+### 3. **SQL Query Editor**
+Interactive SQL editor where users can write and run queries on the generated database.  
+
+![SQL Query Editor](sql_editor.jpeg)
 
 ---
 
