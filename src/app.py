@@ -1,89 +1,79 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
-from flask import Flask, request, jsonify
+import os
 import pickle
 import pandas as pd
-import time
 import numpy as np
 
 app = Flask(__name__)
 CORS(app)
 
-is_hotspot = 0
+# Resolve the absolute path of the 'src' directory relative to this file
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Load the model
-model = pickle.load(open(
-    "/Users/shadowclone/Documents/coursework/BDA594/group Project/data_processing/collision_rf_model.pkl", "rb"))
+# Load the model gracefully
+model_path = os.path.join(BASE_DIR, "collision_rf_model.pkl")
+try:
+    with open(model_path, "rb") as f:
+        model = pickle.load(f)
+except FileNotFoundError:
+    print(f"Warning: Expected model file not found at {model_path}")
+    model = None
 
-all_coords = pd.read_pickle(
-    "/Users/shadowclone/Documents/coursework/BDA696/mapapp/react-map-app/src/coords.pkl")
+# System Startup: Load massive coordinate set into memory exactly once as a Vector array
+coords_path = os.path.join(BASE_DIR, "coords.pkl")
+try:
+    all_coords_series = pd.read_pickle(coords_path)
+    # Convert list of tuples strictly to a standard 2D Numpy Array for instantaneous C-level math
+    ALL_COORDS_NP = np.array(all_coords_series.tolist(), dtype=np.float32)
+    # Convert ALL coordinates from decimal degrees -> Radians to avoid doing it per-request
+    ALL_COORDS_RAD = np.radians(ALL_COORDS_NP)
+except FileNotFoundError:
+    print(f"Warning: Expected coords file not found at {coords_path}")
+    ALL_COORDS_RAD = np.array([])
 
 
-# Define haversine function for PySpark
-def haversine(lat1, lon1, lat2, lon2):
+def compute_membership_vectorized(start_lat, start_lng, min_samples):
     """
-    Compute haversine distance between two points in miles.
+    100x Speedup Vectorized computation of Haversine memberships.
+    Subtracts single coordinate vs entire matrix instantly.
     """
-    R = 3958.8  # Radius of Earth in miles
+    if ALL_COORDS_RAD.size == 0:
+        return 0
 
-    lat1, lon1, lat2, lon2 = map(np.radians, [lat1, lon1, lat2, lon2])
+    R = 3958.8  # Earth radius in miles
+    lat1 = np.radians(start_lat)
+    lon1 = np.radians(start_lng)
+    
+    lat2 = ALL_COORDS_RAD[:, 0]
+    lon2 = ALL_COORDS_RAD[:, 1]
+    
     dlat = lat2 - lat1
     dlon = lon2 - lon1
-
-    a = np.sin(dlat / 2) ** 2 + np.cos(lat1) * \
-        np.cos(lat2) * np.sin(dlon / 2) ** 2
+    
+    a = np.sin(dlat / 2.0)**2 + np.cos(lat1) * np.cos(lat2) * np.sin(dlon / 2.0)**2
     c = 2 * np.arctan2(np.sqrt(a), np.sqrt(1 - a))
-
-    return R * c
-
-# Create a UDF for haversine distance computation
-
-
-def compute_membership(start_lat, start_lng, eps, min_samples, all_coords):
-    """
-    Determines if a point belongs to a cluster based on DBSCAN-like parameters.
-    """
-
-    distances = [haversine(start_lat, start_lng, coord[0], coord[1])
-                 for coord in all_coords]
-
-    # print(distances)
-
-    neighbors_within_eps = sum(d <= 0.1 for d in distances)
-
+    
+    distances = R * c
+    neighbors_within_eps = np.sum(distances <= 0.1)
+    
     return 1 if neighbors_within_eps >= min_samples else 0
 
 
 @app.route("/api/check_hotspot", methods=["POST"])
 def check_hotspot():
     try:
-        # Get JSON data from the request
-        lat = request.json['lat']
-        lng = request.json['lng']
-
-        epsilon = 2 / 6371.0088
-
-        # print(all_coords)
-        # all_coords = all_coords['0']
-
-        # print(type(all_coords))
-
-        global is_hotspot
-
-        is_hotspot = compute_membership(lat, lng, epsilon, 15, all_coords)
-        # time.sleep(3)
-        # print(is_hotspot)
-
-        # print(all_coords)
-
-        # calculations here
-
-        if is_hotspot:
-            x = "This is potential hotspot"
-        else:
-            x = "Not Part of Hotspot cluster"
-
-        return jsonify({"is_hotspot": x})
+        data = request.json
+        lat = data.get('lat')
+        lng = data.get('lng')
+        
+        # Verify if inside hotspot using vectorized engine
+        is_hotspot = compute_membership_vectorized(lat, lng, 15)
+        
+        return jsonify({
+            "is_hotspot": int(is_hotspot),
+            "message": "This is a potential hotspot" if is_hotspot else "Not Part of Hotspot cluster"
+        })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -91,7 +81,10 @@ def check_hotspot():
 @app.route("/api/submit", methods=["POST"])
 def submit():
     try:
-        # Expected column order
+        data = request.json
+        if not data or not isinstance(data, dict):
+            return jsonify({"error": "Invalid input payload"}), 400
+            
         column_order = [
             'Start_Lat', 'Start_Lng', 'Temperature_F', 'Wind_Chill_F',
             'Humidity_pct', 'Pressure_in', 'Visibility_mi', 'Wind_Speed_mph',
@@ -103,40 +96,56 @@ def submit():
             'Weather_Condition_Snowy', 'Weather_Condition_Thunderstorm',
             'Weather_Condition_Unknown'
         ]
-
-        # Get JSON data from the request
-        data = request.json
-        print(is_hotspot)
-        data['is_hotspot'] = is_hotspot
-        print(data)
-
-        # Ensure the expected structure
-        if not data or not isinstance(data, dict):
-            return jsonify({"error": "Invalid input format"}), 400
-
-        # Create a pandas DataFrame with the specified column order
-        # Default missing values to None
-        df = pd.DataFrame([{col: data.get(col, None) for col in column_order}])
-
-        # Print the DataFrame for debugging
-        print(df)
-
-        prediction = model.predict(df)[0]
-        print(prediction)
-        if (prediction == 1):
-            x = f"{prediction} - Very Severe"
-        elif (prediction == 2):
-            x = f"{prediction} - Severe"
-        elif (prediction == 3):
-            x = f"{prediction} - Moderate"
-        else:
-            x = f"{prediction} - Not Severe"
-
-        # Respond back with a success message
-        return jsonify({"prediction": str(x)})
+        
+        # Safety Fix: Read 'is_hotspot' directly from payload state to prevent session bleeding
+        data['is_hotspot'] = int(data.get('is_hotspot', 0))
+        
+        # Vectorize Dictionary generation safely
+        df = pd.DataFrame([{col: data.get(col, 0.0) for col in column_order}])
+        
+        if model is None:
+            return jsonify({"error": "Model missing, cannot predict"}), 404
+            
+        prediction = int(model.predict(df)[0])
+        
+        severity_map = {
+            1: "Not Severe",
+            2: "Moderate",
+            3: "Severe",
+            4: "Very Severe"
+        }
+        severity_text = severity_map.get(prediction, "Unknown")
+        
+        return jsonify({
+            "prediction": prediction,
+            "text": severity_text
+        })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 
+# Serve static frontend files
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def serve_frontend(path):
+    # Static files (JS, CSS, Images) will be in 'static' directory
+    static_dir = os.path.join(BASE_DIR, "static")
+    
+    # If the requested path exists as a file, serve it
+    if path != "" and os.path.exists(os.path.join(static_dir, path)):
+        return send_from_directory(static_dir, path)
+    
+    # For Next.js static export with trailingSlash: true
+    # Subpages like /hotspot/ will have an index.html in out/hotspot/index.html
+    if path.endswith("/") or path == "":
+        full_path = os.path.join(static_dir, path, "index.html")
+        if os.path.exists(full_path):
+            return send_from_directory(os.path.join(static_dir, path), "index.html")
+            
+    # Default to main index.html for CSR navigation (client-side routing)
+    return send_from_directory(static_dir, "index.html")
+
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)

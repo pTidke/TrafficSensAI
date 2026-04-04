@@ -15,19 +15,19 @@
     "axios": "^1.7.7",
     "esri-loader": "^3.7.0",
     "leaflet": "^1.9.4",
+    "next": "^16.2.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-leaflet": "^4.2.1",
     "react-modal": "^3.16.1",
-    "react-router-dom": "^7.0.1",
-    "react-scripts": "^5.0.1",
+    "recharts": "^3.8.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "eslintConfig": {
     "extends": [
