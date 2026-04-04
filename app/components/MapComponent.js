@@ -92,7 +92,7 @@ const MapComponent = () => {
 		};
 
 		try {
-			const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:5000";
+			const baseUrl = process.env.NEXT_PUBLIC_API_URL || "";
 			// Using native fetch to stay lightweight vs axios
 			const res = await fetch(`${baseUrl}/api/submit`, {
 				method: "POST",
@@ -119,7 +119,7 @@ const MapComponent = () => {
 
 	const checkHotspot = async () => {
 		try {
-			const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:5000";
+			const baseUrl = process.env.NEXT_PUBLIC_API_URL || "";
 			const res = await fetch(`${baseUrl}/api/check_hotspot`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
