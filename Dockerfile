@@ -26,12 +26,12 @@ COPY src/ ./src/
 COPY --from=frontend-builder /app/out/ ./src/static/
 
 # Set environment variables
-ENV PORT=5000
 ENV FLASK_APP=src/app.py
 ENV PYTHONUNBUFFERED=1
 
-# Expose the port
-EXPOSE 5000
+# Expose the default gunicorn port (not strictly required for Render)
+EXPOSE 10000
 
-# Run the application
-CMD gunicorn --bind 0.0.0.0:$PORT src.app:app
+# Run the application using the dynamic $PORT provided by Render
+# Added logging to help troubleshoot startup issues
+CMD gunicorn --bind 0.0.0.0:$PORT --access-logfile - --error-logfile - --log-level debug src.app:app
