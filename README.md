@@ -1,7 +1,7 @@
 # TrafficSensAI: Predictive Traffic Accident Analysis Tool 🚦
-
-
 TrafficSensAI is a machine-learning framework for analyzing and predicting traffic collision hotspots. Leveraging datasets from multiple cities in the U.S., this project identifies high-risk traffic zones and contributes to accident prevention and optimized traffic management.
+
+🌐 **Live Demo:** [trafficsensai.onrender.com](https://trafficsensai.onrender.com/)
 
 ---
 
